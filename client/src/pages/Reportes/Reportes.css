@@ -1,0 +1,11 @@
+.table tr td {
+    vertical-align: middle;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+.table tr td .foto {
+    width: 100%;
+    max-width: 100px;
+    height: auto;
+}

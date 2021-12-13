@@ -1,0 +1,123 @@
+.page-subasta .informacion {
+	width: 39.5%;
+}
+.page-subasta .informacion.online {
+	width: 29.5%;
+}
+.page-subasta .panel-pujas {
+	width: 59.5%;
+}
+.page-subasta .panel-pujas.online {
+	width: 44.5%;
+}
+.page-subasta .usuarios {
+	width: 24.5%;
+}
+
+.page-subasta .img-subasta img {
+	width: 100%;
+	height: auto;
+}
+.page-subasta .titulo {
+	font-weight: bolder;
+}
+.page-subasta .informacion .titulo {
+	background: #F39C12;
+}
+.page-subasta .historial-pujas {
+	max-height: 250px;
+	overflow-y: auto;
+}
+.page-subasta .usuarios {
+	height: 100%;
+	max-height: 500px;
+	overflow: hidden;
+	background: #FFF;
+}
+.page-subasta .usuarios .titulo {
+	background: #28B463;
+}
+.page-subasta .usuarios .notificaciones-usuarios {
+	position: relative;
+	height: 50%;
+	max-height: 210px;
+	overflow-x: visible;
+	overflow-y: auto;
+	border-bottom: 2px solid #198754;
+}
+.page-subasta .usuarios .all-usuarios {
+	position: relative;
+	height: 50%;
+	max-height: 210px;
+	overflow-x: visible;
+	overflow-y: auto;
+}
+.page-subasta .all-usuarios .usuario {
+	cursor: default;
+	transition: .3s ease all;
+}
+.page-subasta .all-usuarios .usuario:hover {
+	background: #f8f9fa;
+}
+
+.page-subasta .all-usuarios .img-usuario {
+	width: 100%;
+	height: 100%;
+	max-width: 40px;
+	max-height: 40px;
+	border-color: #28B463!important;
+}
+.page-subasta .all-usuarios .img-usuario img {
+	width: 115%;
+	height: 115%;
+	max-width: 40px;
+	max-height: 40px;
+	border-color: #28B463!important;
+}
+.page-subasta .all-usuarios .usuario h6 {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+@media (max-width: 992px) {
+
+	.page-subasta .informacion {
+		order: 1;
+		width: 100%;
+		margin-bottom: 1rem;
+	}
+	.page-subasta .informacion.online {
+		order: 1;
+		width: 59.5%;
+	}
+	.page-subasta .panel-pujas {
+		order: 3;
+		width: 100%;
+	}
+	.page-subasta .usuarios {
+		order: 2;
+		width: 39%;
+		max-height: 600px;
+	}
+}
+@media (max-width: 768px) {
+	.page-subasta .informacion {
+		order: 1;
+		width: 100%;
+	}
+	.page-subasta .panel-pujas {
+		order: 2;
+		width: 100%;
+	}
+	.page-subasta .usuarios {
+		order: 3;
+		width: 100%;
+		max-height: 500px;
+	}
+	.page-subasta .usuarios .notificaciones-usuarios {
+		max-height: 210px;
+	}
+	.page-subasta .usuarios .all-usuarios {
+		max-height: 210px;
+	}
+}

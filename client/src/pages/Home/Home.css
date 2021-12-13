@@ -1,0 +1,59 @@
+.home-subsatas .subasta {
+	width: 49.5%;
+    transition: .3s ease all;
+	flex-wrap: nowrap;
+}
+.home-subsatas .subasta:hover {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    transform: translateY(-5px);
+}
+.home-subsatas .subasta .badge-subasta {
+	top: 5px; 
+	right: 5px;
+	z-index: 1;
+    box-shadow: -1px 2px 7px 1px rgb(96 125 139 / 70%);
+}
+.home-subsatas .subasta .img-subasta {
+	width: 100%;
+	height: 100%;
+	max-width: 200px;
+	max-height: 300px;
+}
+.imagen-subasta {
+	height: 100%;
+	width: auto;
+	transition: all .3s ease;
+}
+.home-subsatas .subasta:hover .imagen-subasta {
+	transform: scale(0.85);
+}
+
+@media (max-width: 992px) {
+	.home-subsatas .subasta {
+		flex-direction: column;
+		flex-wrap: wrap;
+	}
+	.home-subsatas .subasta .info-subasta {
+		order: 2;
+	}
+    .home-subsatas .subasta .img-subasta {
+		max-width: inherit;
+		max-height: 150px;
+		order: 1;
+	}
+	.imagen-subasta {
+		height: auto;
+		width: 100%;
+	}
+	.home-subsatas .subasta:hover .imagen-subasta {
+		transform: scale(0.95);
+	}
+}
+@media (max-width: 768px) {
+	.home-subsatas .subasta {
+		width: 100%;
+	}
+	.home-subsatas .subasta .img-subasta {
+		max-height: 200px;
+	}
+}

@@ -1,0 +1,19 @@
+nav.header {
+    z-index: 1;
+}
+nav.header .container-notificaciones {
+    height: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+}
+nav.header .nav-item .btn.active {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+nav.header .list-group-item.active {
+    color: #212529;
+    background-color: #eeeeee;
+    border-color: #00000020;
+}
+nav.header .delete-notificacion:hover {
+    color: red;
+}
