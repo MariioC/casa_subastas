@@ -9,7 +9,7 @@ export let socket = io(BASE_URI, {
     autoConnect: false
 })
 
-export let socketBusbasta = io(BASE_URI+'subasta', {
+export let socketSusbasta = io(BASE_URI+'subasta', {
     reconnectionDelayMax: 1000,
     auth: {
         token: localStorage.getItem('token')
@@ -18,7 +18,7 @@ export let socketBusbasta = io(BASE_URI+'subasta', {
 })
 
 export const connectSocketSubasta = ({ id_subasta }) => {
-    socketBusbasta = io(BASE_URI+'subasta', {
+    socketSusbasta = io(BASE_URI+'subasta', {
         reconnectionDelayMax: 1000,
         auth: {
             token: localStorage.getItem('token')
@@ -29,7 +29,7 @@ export const connectSocketSubasta = ({ id_subasta }) => {
         autoConnect: false
     })
 
-    socketBusbasta.connect();
+    socketSusbasta.connect();
 }
 
 export const resetSocket = () => {
@@ -51,11 +51,11 @@ socket.offAny((event, ...args) => {
     console.log(event, args)
 })
 
-socketBusbasta.offAny((event, ...args) => {
+socketSusbasta.offAny((event, ...args) => {
     console.log(event, args)
 })
 
-socketBusbasta.onAny((event, ...args) => {
+socketSusbasta.onAny((event, ...args) => {
     console.log(event, args)
 })
 
@@ -67,7 +67,7 @@ socket.on("connect_error", (err) => {
     }
 })
 
-socketBusbasta.on("connect_error", (err) => {
+socketSusbasta.on("connect_error", (err) => {
     if (err.message === "Invalid token") {
         console.error('[FALLO AL CONECTAR A LA SUBASTA]' + err.message)
     } else {

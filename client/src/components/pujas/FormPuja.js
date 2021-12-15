@@ -7,7 +7,7 @@ import { _newPuja } from '../../api/pujas.api'
 
 import { SubastaContext } from '../../context/SubastaContext'
 import { finishLoading, showError, startLoading } from '../../actions/ui'
-import { socketBusbasta } from '../../sockets/socket'
+import { socketSusbasta } from '../../sockets/socket'
 
 export const FormPuja = () => {
 
@@ -15,7 +15,7 @@ export const FormPuja = () => {
 
     const { id } = useParams()
 
-    const { subasta: { online, finalizada }, puja_mayor: { valor } } = useContext(SubastaContext)
+    const { subasta: { finalizada }, puja_mayor: { valor } } = useContext(SubastaContext)
 
     const [ minValor, setMinValor ] = useState(valor)
 
@@ -48,8 +48,8 @@ export const FormPuja = () => {
 
             const { puja } = data
 
-            if(online)
-                socketBusbasta.emit('subasta:new-puja', { puja })
+            if(!finalizada)
+                socketSusbasta.emit('subasta:new-puja', { puja })
 
         } catch (error) {
             console.error(error)

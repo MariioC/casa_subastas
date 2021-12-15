@@ -5,8 +5,8 @@ export const PujasController = {
         return await PujaModel.find({ id_subasta }).sort({ valor : -1 })
     },
 
-    async getPujaById(id_subasta) {
-        return await PujaModel.findById(id_subasta)
+    async getPujaById(id_puja) {
+        return await PujaModel.findById(id_puja)
     },
 
     async getPujaSubastaByValor(id_subasta, valor) {

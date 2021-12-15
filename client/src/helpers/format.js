@@ -10,7 +10,7 @@ export const prettierValorCOP = (valor) => {
 
 export const prettierFecha = (fecha) => {
     const date = new Date(fecha);
-    const optionsDate = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'UTC'};
+    const optionsDate = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: true, minute: 'numeric', timeZone: 'UTC'};
 
-    return date.toLocaleDateString('es-ES', optionsDate)
+    return date.toLocaleDateString('es-US', optionsDate)
 }

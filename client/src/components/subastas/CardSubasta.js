@@ -34,7 +34,7 @@ export const CardSubasta = ( { subasta } ) => {
 
     useEffect(() => {
 
-        let tick;
+        let tickCardSubasta;
 
         if (!finalizada && online) {
             //Compruebo si la subasta ya inicio 
@@ -44,14 +44,14 @@ export const CardSubasta = ( { subasta } ) => {
                 setIniciada(true)
                 setTemporizador(null)
                 
-                clearInterval(tick);
+                clearInterval(tickCardSubasta);
 
             } else {
                 const diferencia = fechaInicio - fechaActual;
                 const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));        
 
                 if(minutos >= 0 && minutos < 10) {
-                    tick = setInterval(() => {
+                    tickCardSubasta = setInterval(() => {
                         const now = new Date();
                         const diferencia = fechaInicio - now;
             
@@ -72,7 +72,7 @@ export const CardSubasta = ( { subasta } ) => {
         }
 
         return () => {
-            clearInterval(tick);
+            clearInterval(tickCardSubasta);
         }
 
     }, [ finalizada, online, fechaActual, fechaInicio, temporizador ])

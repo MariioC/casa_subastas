@@ -2,14 +2,11 @@
 - Temporizador en el CardSubasta si la subasta esta a 10min de iniciar
 - Corregir el responsive del panel de pujas
 - Cuando el usuario ingrese a la subasta, verificar que la subasta no este en curso, de lo contrario prohibirle el ingreso
-- 
-
-
-# TODO
-
 - Opción de ativar o desactivar los sonidos de la subasta
 
-- Hacer que cuando el usuario vaya a salir de la subasta y si esta es online y no ha finalizado y si la mejor puja es de el, informarle que esta será eliminada y ya no se tendrá en cuenta si no hasta que finalice la subasta
+ 
+# TODO
+- Hacer que cuando el usuario vaya a salir de una subasta ONLINE se le informe que no podra volver acceder a ella
 
 - Cuando la subasta aún no inicie, no mostrar el formulario para realizar pujas
 

@@ -11,3 +11,7 @@ export const _getSubastas = async ( ) => {
 export const _getSubasta = async ( id ) => {
     return await api.get(`subastas/${id}`)
 }
+
+export const _finishSubasta = async ( id ) => {
+    return await api.put(`subastas/finish/${id}`)
+}

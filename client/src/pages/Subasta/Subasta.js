@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { finishLoading, showError, startLoading } from '../../actions/ui';
 import { SubastaProvider } from '../../context/SubastaContext';
 import { LoadingPage } from '../../components/LoadingPage';
-import { connectSocketSubasta, socketBusbasta } from '../../sockets/socket';
+import { connectSocketSubasta, socketSusbasta } from '../../sockets/socket';
 import { ToastCancelPuja } from '../../components/subastas/ToastCancelPuja';
 
 import './Subasta.css';
@@ -78,7 +78,7 @@ const Subasta = () => {
                 //     return navigate('/', { replace: true });
                 // }
 
-                if(!finalizada && subasta.online)
+                if(!finalizada)
                     connectSocketSubasta({ id_subasta: id })
 
                 setLoading(false)
@@ -92,7 +92,7 @@ const Subasta = () => {
         getSubastas();
 
         return () => {
-            socketBusbasta.disconnect();
+            socketSusbasta.disconnect();
         }
         
     }, [ dispatch, id, navigate ])

@@ -16,11 +16,7 @@ export const ToastCancelPuja = () => {
             clearTimeout(clear);
         }
     }, [ setCancelPuja ])
-
-    // TODO:
-    // Hacer que un usuario no pueda realizar 2 pujas seguidas
-    // Hacer que no se pueda eliminar cualquier pujas, si no solo la última realizad por el usuario
-
+    
     return (
         <>
             {
