@@ -85,6 +85,11 @@
 		order: 1;
 		width: 100%;
 		margin-bottom: 1rem;
+
+		/* position: fixed;
+		left: 0;
+		display: none; */
+
 	}
 	.page-subasta .informacion.online {
 		order: 1;
@@ -92,18 +97,23 @@
 	}
 	.page-subasta .panel-pujas {
 		order: 3;
-		width: 100%;
+		width: 100%!important;
 	}
 	.page-subasta .usuarios {
 		order: 2;
 		width: 39%;
 		max-height: 600px;
+
+		/* position: absolute!important;
+		right: 0;
+		display: none; */
+
 	}
 }
 @media (max-width: 768px) {
 	.page-subasta .informacion {
 		order: 1;
-		width: 100%;
+		width: 100%!important;
 	}
 	.page-subasta .panel-pujas {
 		order: 2;

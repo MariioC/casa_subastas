@@ -13,12 +13,12 @@ export const CardSubasta = ( { subasta } ) => {
 
     const { _id, nombre, foto, descripcion, fecha_inicio, fecha_fin, online, monto_inicial } = subasta
 
-    const [ temporizador, setTemporizador ] = useState({
-        minutos: 0,
-        segundos: 0
-    })
+    const [iniciada, setIniciada] = useState(false)
 
-    const fechaActual = new Date()
+    const [ temporizador, setTemporizador ] = useState(null)
+
+    // const fechaActual = new Date()
+    const fechaActual = useMemo(() => new Date(), [ ]);
 
     // Compruebo si la subasta ya finalizó mediante las fechas
     const dateFin = new Date(fecha_fin)
@@ -26,65 +26,56 @@ export const CardSubasta = ( { subasta } ) => {
     
     const finalizada = fechaActual.getTime() >= fechaFin.getTime() ? true : false
 
-    //Compruebo si la subasta ya inicio 
     // const dateInicio = new Date(fecha_inicio)
     const dateInicio = useMemo(() => new Date(fecha_inicio), [ fecha_inicio ]);
     // const fechaInicio = new Date(dateInicio.getTime() + dateInicio.getTimezoneOffset() * 60000)
 
     const fechaInicio = useMemo(() => new Date(dateInicio.getTime() + dateInicio.getTimezoneOffset() * 60000), [ dateInicio ]);
 
-    let iniciarTemporizador = false;
-
-    
-    if (!finalizada) {
-
-        // const iniciada = fechaActual.getTime() >= fechaInicio.getTime() ? true : false
-
-        const diferencia = fechaInicio - fechaActual;
-        const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-        const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-        console.log(minutos);
-
-        if(minutos < 5 && minutos > 0) {
-            iniciarTemporizador = true;
-            console.log('Aún puedes ingresar');
-        } else {
-            console.log('Ya no se permit el ingreso a esta subasta');
-        }
-    }
-
     useEffect(() => {
-        const tick = setInterval(() => {
-            if(!iniciarTemporizador) {
-                return 
+
+        let tick;
+
+        if (!finalizada && online) {
+            //Compruebo si la subasta ya inicio 
+            const subastaIniciada = new Date().getTime() >= fechaInicio.getTime() ? true : false
+    
+            if(subastaIniciada) {
+                setIniciada(true)
+                setTemporizador(null)
+                
+                clearInterval(tick);
+
+            } else {
+                const diferencia = fechaInicio - fechaActual;
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));        
+
+                if(minutos >= 0 && minutos < 10) {
+                    tick = setInterval(() => {
+                        const now = new Date();
+                        const diferencia = fechaInicio - now;
+            
+                        const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+                        const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+                        let strMinutos = `0${minutos}`
+                        let strSegundos = `${segundos <= 9 ? '0' : ''}${segundos}`
+                        
+                        setTemporizador({
+                            minutos: strMinutos, 
+                            segundos: strSegundos
+                        })
+                    }, 1000);
+                }
             }
-
-            const now = new Date();
-            const diferencia = fechaInicio - now;
-
-            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-            setTemporizador({
-                minutos, segundos
-            })
-
-            console.log(temporizador);
-
-            // if(minutos <= 5 && minutos > 0) {
-            //     let minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            //     let segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-            //     // console.log(minutos, segundos);
-            // }
-
-        }, 1000);
+    
+        }
 
         return () => {
             clearInterval(tick);
         }
-    }, [ iniciarTemporizador, fechaInicio, temporizador ])
+
+    }, [ finalizada, online, fechaActual, fechaInicio, temporizador ])
 
     const errorImg = (e) => {
         e.target.src = img.default
@@ -105,9 +96,22 @@ export const CardSubasta = ( { subasta } ) => {
                 </div>
                 <p className="card-text mb-auto mt-2">{ descripcion.substring(0, 50) }...</p>
                 <p className="card-text mb-2 fw-bolder">Monto inicial: { prettierValorCOP(monto_inicial) }</p>
-                <Link to={`/subasta/${_id}`} className="stretched-link btn btn-outline-primary mt-auto fw-bold">
-                    Ver detalles de la subasta
-                </Link>
+                
+                { temporizador &&
+                    <p className="card-text text-success mb-2 fw-bolder text-center">Iniciará en: { temporizador.minutos} : { temporizador.segundos }</p>
+                }
+
+                {
+                    iniciada 
+                    ?
+                        <button type="button" className="stretched-link btn btn-success mt-auto fw-bold" disabled>
+                            La subasta se encuentra en curso
+                        </button>
+                    : 
+                        <Link to={`/subasta/${_id}`} className="stretched-link btn btn-outline-primary mt-auto fw-bold">
+                            Ir a la subasta
+                        </Link>
+                }
             </div>
             <div className="img-subasta col-auto d-flex justify-content-center align-items-center overflow-hidden">
                 <img className="imagen-subasta animated fadeIn d-block" onError={ errorImg } src={ URI_IMGS + foto } alt={ nombre } width={200} height={250} />

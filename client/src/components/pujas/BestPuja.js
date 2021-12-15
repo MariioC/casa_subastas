@@ -1,41 +1,55 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { prettierValorCOP } from '../../helpers/format'
 
 import PujaMayor from '../../assets/img/puja-mayor.png'
 import soundPuja from '../../assets/audio/puja.mp3'
-import { showSuccess } from '../../actions/ui'
 import { useDispatch } from 'react-redux'
+import { SubastaContext } from '../../context/SubastaContext'
+import { ModalGanadorSubasta } from './ModalGanadorSubasta'
 
 
-export const BestPuja = ({ online, finalizada, puja_mayor }) => {
+export const BestPuja = () => {
 
     const dispatch = useDispatch();
+
+    const { subasta, puja_mayor, sonido, setSubasta } = useContext(SubastaContext)
+
+    const { online, finalizada } = subasta
 
     const { valor, nombre_pujador, documento_pujador } = puja_mayor
 
     const [ temporizador, setTemporizador ] = useState(30)
 
-    useEffect(() => {
+    const [ modalGanador, setModalGanador ] = useState(false)
 
+    useEffect(() => {
         let tick;
-        if(documento_pujador) {
+
+        if(!finalizada && online && documento_pujador) {
+
             tick = setInterval(() => {
                 setTemporizador(previousState => previousState - 1)
             }, 1000);
 
             if(temporizador === 0) {
                 clearInterval(tick)
-                dispatch( showSuccess(`No se han recibido mas subastas, el ganador de la subasta es: ${ nombre_pujador }`) )
+                const copyInfoSubasta = JSON.parse(JSON.stringify(subasta))
+                copyInfoSubasta['finalizada'] = true
+                setSubasta(copyInfoSubasta)
+                setModalGanador(true)
             }
         }
         return () => {
             clearInterval(tick)
         }
 
-    }, [ documento_pujador, temporizador, dispatch, nombre_pujador ])
+    }, [ documento_pujador, temporizador, dispatch, nombre_pujador, finalizada, online, subasta, setSubasta])
 
     return (
         <>
+            {
+                modalGanador && <ModalGanadorSubasta ganador={puja_mayor} setModalGanador={setModalGanador} />
+            }
             <p className="px-4 text-center text-muted lh-sm small">
                 A continuación, aparece la puja ganadora actual de la subasta y el historial de todas las pujas que se han realizado durante la subasta                
             </p>
@@ -66,7 +80,7 @@ export const BestPuja = ({ online, finalizada, puja_mayor }) => {
             </div>
 
             {
-                !finalizada && online &&
+                !finalizada && online && sonido &&
                 <audio className="visually-hidden" autoPlay="autoplay">
                     <source src={soundPuja}></source>
                 </audio>

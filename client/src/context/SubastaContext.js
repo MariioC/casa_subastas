@@ -19,6 +19,7 @@ export const SubastaProvider = ( { children, info } ) => {
         puja_cancelada: null,
         noti_participantes: [],
         participantes: [],
+        sonido: localStorage.getItem('sonido') === "false" ? false : true
     };
 
     const [ state, dispatch ] = React.useReducer(subastaReducer, initialState);
@@ -30,6 +31,13 @@ export const SubastaProvider = ( { children, info } ) => {
         puja_cancelada: state.puja_cancelada,
         noti_participantes: state.noti_participantes,
         participantes: state.participantes,
+        sonido: state.sonido,
+        setSonido: ( sonido ) => {
+            dispatch({ type: types.set_sonido, sonido });
+        },
+        setSubasta: ( subasta ) => {
+            dispatch({ type: types.set_subasta, subasta });
+        },
         setParticipantes: ( usuarios ) => {
             dispatch({ type: types.set_participantes, usuarios });
         },

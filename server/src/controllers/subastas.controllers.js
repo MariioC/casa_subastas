@@ -2,7 +2,7 @@ import SubastaModel from "../models/subasta.model";
 
 export const SubastasController = {
     async getSubastas() {
-        return await SubastaModel.find()
+        return await SubastaModel.find().sort({ fecha_fin: -1 })
     },
 
     async getSubastaById(id_subasta) {

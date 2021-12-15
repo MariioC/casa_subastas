@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
-import { CardSubasta } from "../../components/subastas/CardSubasta";
+import { CardSubasta } from '../../components/subastas/CardSubasta';
 
 import Logo from '../../assets/img/logo.png'
-import "./Home.css";
-import { _getSubastas } from "../../api/subastas.api";
-import { finishLoading, showError, startLoading } from "../../actions/ui";
+import './Home.css';
+import { _getSubastas } from '../../api/subastas.api';
+// import { showError } from '../../actions/ui';
 
 const Home = () => {
 
@@ -20,27 +20,25 @@ const Home = () => {
     useEffect(() => {
 
         const getSubastas = async () => {
-            dispatch( startLoading() )
             try {
                 const { data } = await _getSubastas()
-                dispatch( finishLoading() )
-    
+
                 if(data.error) {
-                    dispatch(finishLoading())
-                    dispatch(showError( data.error ))
+                    // dispatch(showError( data.error ))
                     return
                 }
     
                 const { subastas } = data
                 setSubastas(subastas);
-    
+                
             } catch (error) {
                 console.error(error)
-                dispatch(showError())
+                setSubastas([])
+                // dispatch(showError())
             }
         }
 
-        getSubastas();
+        getSubastas()
 
     }, [ dispatch ])
 

@@ -12,6 +12,8 @@ export const types = {
 
 
 
+    set_subasta: '[SUBASTA] Set info subasta',
+    set_sonido: '[SUBASTA] Activar o desactivar sonido',
     set_participantes: '[SUBASTA] Setear participantes',
     add_participante: '[SUBASTA] Agregar participante',
     remove_participante: '[SUBASTA] Eliminar participante',

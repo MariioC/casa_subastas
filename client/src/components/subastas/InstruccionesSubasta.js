@@ -35,7 +35,7 @@ export const InstruccionesSubasta = ({ setVerCondiciones }) => {
 
                         <li className="mb-2">Si en el transcurso de los 30 segundos <strong>NO</strong> hay una nueva puja, Se dará por finalizada la subasta y el ganador será el usuario que realizó la ultima puja</li>
 
-                        <li className="mb-2">NO puede realizar 2 pujas seguidas, si usted se sitúa como el <strong>"ganador temporal"</strong> de la subasta, no podrá realizar más pujas hasta que otro participante supere el valor de su puja</li>
+                        <li className="mb-2">NO puede realizar 2 pujas seguidas, si usted se sitúa como el <strong>"Ganador temporal"</strong> de la subasta, no podrá realizar más pujas hasta que otro participante supere el valor de su puja</li>
 
                     </ul>
                     {   !ocultarInstruccionesAlIniciar &&

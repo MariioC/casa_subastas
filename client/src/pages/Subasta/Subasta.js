@@ -5,7 +5,7 @@ import { PanelPujas } from '../../components/pujas/PanelPujas';
 import { PanelUsuarios } from '../../components/usuarios/PanelUsuarios';
 
 import { _getSubasta } from '../../api/subastas.api';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { finishLoading, showError, startLoading } from '../../actions/ui';
 import { SubastaProvider } from '../../context/SubastaContext';
@@ -19,6 +19,9 @@ import { InstruccionesSubasta } from '../../components/subastas/InstruccionesSub
 
 const Subasta = () => {
 
+
+    const navigate = useNavigate();
+
     const { id } = useParams();
 
     const [loading, setLoading] = useState(true)
@@ -31,16 +34,7 @@ const Subasta = () => {
     })
 
     const ocultarInstruccionesAlIniciar = localStorage.getItem('ocultarInstruccionesAlIniciar');
-
     const [ verCondiciones, setVerCondiciones ] = useState(!ocultarInstruccionesAlIniciar)
-
-    // const toggleVerCondiciones = () => {
-    //     setVerCondiciones(true)
-    // }
-
-    //TODO: Hacer que cuando el usuario vaya a salir de la subasta y si esta es online y no ha finalizado y si la mejor puja es de el, informarle que esta será eliminada y ya no se tendrá en cuenta si no hasta que finalice la subasta
-
-    // Hacer una especie de contador, cada vez que haya una nueva puja haya un contador de 20 - 30 seg y que si este termina, la subasta se dará por finalizada y el ganador sera el usuario que hizo la ultima puja
 
     useEffect(() => {
 
@@ -60,6 +54,9 @@ const Subasta = () => {
                 // Compruebo si la subasta ya finalizó mediante las fechas
                 const dateFin = new Date(subasta.fecha_fin)
                 const fechaFin = new Date(dateFin.getTime() + dateFin.getTimezoneOffset() * 60000)
+
+                const dateInicio = new Date(subasta.fecha_inicio)
+                const fechaInicio = new Date(dateInicio.getTime() + dateInicio.getTimezoneOffset() * 60000)
                 
                 const fechaActual = new Date()
 
@@ -67,15 +64,25 @@ const Subasta = () => {
 
                 subasta['finalizada'] = finalizada;
 
+                const enCurso = fechaActual.getTime() >= fechaInicio.getTime() && !finalizada ? true : false
+
+                subasta['en_curso'] = enCurso;
+
                 setSubastaInfo({
                     subasta,
                     pujas
                 });
 
+                // if (enCurso) {
+                //     dispatch( showError('La subasta ya inicio. No se permiten más participantes') )
+                //     return navigate('/', { replace: true });
+                // }
+
                 if(!finalizada && subasta.online)
                     connectSocketSubasta({ id_subasta: id })
 
                 setLoading(false)
+
             } catch (error) {
                 console.error(error)
                 dispatch(showError())
@@ -88,7 +95,7 @@ const Subasta = () => {
             socketBusbasta.disconnect();
         }
         
-    }, [ dispatch, id ])
+    }, [ dispatch, id, navigate ])
 
 
     if(loading) {

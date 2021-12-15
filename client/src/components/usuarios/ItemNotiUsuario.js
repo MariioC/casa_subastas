@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import soundJoin from '../../assets/audio/joinSubasta.mp3'
 import soundLeave from '../../assets/audio/leaveSubasta.mp3'
+import { SubastaContext } from '../../context/SubastaContext'
 
 export const ItemNotiUsuario = ({ notificacion }) => {
 
+    const { subasta: { online, finalizada }, sonido } = useContext(SubastaContext)
 
 
     const { usuario, mensaje, join } = notificacion
@@ -29,9 +31,12 @@ export const ItemNotiUsuario = ({ notificacion }) => {
                 <strong>{ usuario.nombre }</strong> <span className={`${!join && 'text-danger opacity-75'}`}>{ mensaje }</span>
             </p>
 
-            <audio className="visually-hidden" autoPlay="autoplay">
-                <source src={join ? soundJoin : soundLeave}></source>
-            </audio>
+            {
+                !finalizada && online && sonido &&
+                <audio className="visually-hidden" autoPlay="autoplay">
+                    <source src={join ? soundJoin : soundLeave}></source>
+                </audio>
+            }
         </div>
     )
 }
