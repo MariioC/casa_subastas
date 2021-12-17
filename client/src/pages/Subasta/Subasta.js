@@ -73,10 +73,10 @@ const Subasta = () => {
                     pujas
                 });
 
-                // if (enCurso) {
-                //     dispatch( showError('La subasta ya inicio. No se permiten más participantes') )
-                //     return navigate('/', { replace: true });
-                // }
+                if (enCurso) {
+                    dispatch( showError('La subasta ya inicio. No se permiten más participantes') )
+                    return navigate('/', { replace: true });
+                }
 
                 if(!finalizada)
                     connectSocketSubasta({ id_subasta: id })

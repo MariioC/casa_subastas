@@ -120,6 +120,12 @@ export const IndexRouter = () => {
                         </RequireAuth>} 
                     />
 
+                    <Route path="/edit/subasta/:id" element={ 
+                        <RequireAuth interno={true}> 
+                            <NewSubasta />
+                        </RequireAuth>} 
+                    />
+
                     <Route path="/subasta/:id" element={ 
                         <RequireAuth> 
                             <Subasta />

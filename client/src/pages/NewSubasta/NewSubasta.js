@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { finishLoading, showError, showSuccess, startLoading } from '../../actions/ui';
 import { _newSubasta } from '../../api/subastas.api';
 import { LoadingBtn } from '../../components/LoadingBtn';
@@ -14,7 +15,9 @@ const NewSubasta = () => {
 
     const [previewImg, setPreviewImg] = useState(null)
 
-    const [ subasta, handleInputChange, resetData ] = useForm({
+    const { state: dataSubasta } = useLocation()
+    
+    let initDataForm = dataSubasta ? dataSubasta : {
         nombre: '',
         descripcion: '',
         fecha_cancelacion: '',
@@ -24,7 +27,11 @@ const NewSubasta = () => {
         hora_fin: '',
         monto_inicial: '',
         online: ''
-    })
+    }
+
+    console.log(dataSubasta);
+
+    const [ subasta, handleInputChange, resetData ] = useForm(initDataForm)
 
     const {
         nombre,
