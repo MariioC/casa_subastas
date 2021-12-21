@@ -48,7 +48,7 @@ subastasRoutes.get('/:id_subasta', verifyUserToken, async (req, res) => {
     }
 })
 
-subastasRoutes.post('/new', multer({ dest: path.join(__dirname, '../public/img/temp')}).single('foto'), validatorSubasta, verifyUserToken, IsInterno, async (req, res) => {
+subastasRoutes.post('/', multer({ dest: path.join(__dirname, '../public/img/temp')}).single('foto'), validatorSubasta, verifyUserToken, IsInterno, async (req, res) => {
 
     const { nombre, descripcion, fecha_cancelacion, fecha_inicio: f_inicio, hora_inicio, fecha_fin: f_fin, hora_fin, monto_inicial = 0, online } = req.body
 
@@ -117,6 +117,81 @@ subastasRoutes.post('/new', multer({ dest: path.join(__dirname, '../public/img/t
     }
 })
 
+subastasRoutes.put('/:id_subasta', multer({ dest: path.join(__dirname, '../public/img/temp')}).single('foto'), validatorSubasta, verifyUserToken, IsInterno, async (req, res) => {
+
+    const { id_subasta } = req.params
+
+    const { nombre, descripcion, fecha_cancelacion, fecha_inicio: f_inicio, hora_inicio, fecha_fin: f_fin, hora_fin, monto_inicial = 0, online, foto } = req.body
+
+    const { data_token } = req.body
+
+    try {
+        const subasta = await SubastasController.getSubastaById(id_subasta)
+
+        if(!subasta) {
+            return res.json({
+                error: 'No se ha encontrado la sabasta'
+            })
+        }
+
+        let imgUploded = null;
+
+        if(req.file) {
+            // Proceso la imagen enviada por el usuario
+            imgUploded = await uploadImg(req.file)
+    
+            if(imgUploded.error) {
+                return res.json({
+                    error: imgUploded.error
+                })
+            }
+        }
+
+        // Configuro la fecha de inicio de la subasta correctamente
+        const arrHHmmInicio = hora_inicio.split(':')
+        const milisegundosHoraInicio = (+arrHHmmInicio[0]) * 60 * 60 + (+arrHHmmInicio[1]) * 60 
+        
+        let fecha_inicio = new Date(f_inicio)
+        fecha_inicio = new Date(fecha_inicio.getTime() + milisegundosHoraInicio * 1000)
+
+        // Configuro la fecha de finalizción de la subasta correctamente
+        const arrHHmmFin = hora_fin.split(':')
+        const milisegundosHoraFin = (+arrHHmmFin[0]) * 60 * 60 + (+arrHHmmFin[1]) * 60 
+
+        let fecha_fin = new Date(f_fin)
+        fecha_fin = new Date(fecha_fin.getTime() + milisegundosHoraFin * 1000)
+
+        const documento_subastador = data_token.documento
+
+        subasta.overwrite({
+            nombre,
+            foto: !imgUploded ? subasta.foto : imgUploded.fileName,
+            descripcion,
+            fecha_cancelacion,
+            fecha_inicio,
+            hora_inicio,
+            fecha_fin,
+            hora_fin,
+            monto_inicial,
+            online,
+            documento_subastador
+        });
+
+        subasta.save()
+
+        res.json({
+            message: 'Subasta actualizada correctamente',
+            subasta
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.json({
+            error: 'Ha ocurrido un error inesperado al actualizar la subasta',
+        })
+    }
+})
+
 subastasRoutes.put('/finish/:id_subasta', verifyUserToken, async (req, res) => {
 
     const { id_subasta } = req.params
@@ -180,6 +255,35 @@ subastasRoutes.put('/finish/:id_subasta', verifyUserToken, async (req, res) => {
         console.log(error)
         res.json({
             error: 'Ha ocurrido un error inesperado al finalizar la subasta',
+        })
+    }
+})
+
+subastasRoutes.delete('/:id_subasta', verifyUserToken, IsInterno, async (req, res) => {
+
+    const { id_subasta } = req.params
+
+    try {
+
+        const subasta = await SubastasController.getSubastaById(id_subasta)
+        
+        if(!subasta) {
+            return res.json({
+                error: 'La subasta no existe o ya fue eliminada',
+            })
+        }
+
+        await PujasController.deleteAllPujaBySubasta(id_subasta)
+        await SubastasController.deleteSubasta(id_subasta)
+
+        return res.json({
+            message: 'Subasta eliminada correctamente',
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.json({
+            error: 'Ha ocurrido un error inesperado al eliminar la subasta',
         })
     }
 })

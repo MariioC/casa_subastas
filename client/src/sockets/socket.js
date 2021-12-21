@@ -9,7 +9,7 @@ export let socket = io(BASE_URI, {
     autoConnect: false
 })
 
-export let socketSusbasta = io(BASE_URI+'subasta', {
+export let socketSubasta = io(BASE_URI+'subasta', {
     reconnectionDelayMax: 1000,
     auth: {
         token: localStorage.getItem('token')
@@ -18,7 +18,7 @@ export let socketSusbasta = io(BASE_URI+'subasta', {
 })
 
 export const connectSocketSubasta = ({ id_subasta }) => {
-    socketSusbasta = io(BASE_URI+'subasta', {
+    socketSubasta = io(BASE_URI+'subasta', {
         reconnectionDelayMax: 1000,
         auth: {
             token: localStorage.getItem('token')
@@ -29,7 +29,7 @@ export const connectSocketSubasta = ({ id_subasta }) => {
         autoConnect: false
     })
 
-    socketSusbasta.connect();
+    socketSubasta.connect();
 }
 
 export const resetSocket = () => {
@@ -42,23 +42,6 @@ export const resetSocket = () => {
     })
 }
 
-
-socket.onAny((event, ...args) => {
-    console.log(event, args)
-})
-
-socket.offAny((event, ...args) => {
-    console.log(event, args)
-})
-
-socketSusbasta.offAny((event, ...args) => {
-    console.log(event, args)
-})
-
-socketSusbasta.onAny((event, ...args) => {
-    console.log(event, args)
-})
-
 socket.on("connect_error", (err) => {
     if (err.message === "Invalid token") {
         console.error('[FALLO AL CONECTAR CON EL SOCKET]' + err.message)
@@ -67,7 +50,7 @@ socket.on("connect_error", (err) => {
     }
 })
 
-socketSusbasta.on("connect_error", (err) => {
+socketSubasta.on("connect_error", (err) => {
     if (err.message === "Invalid token") {
         console.error('[FALLO AL CONECTAR A LA SUBASTA]' + err.message)
     } else {
@@ -84,10 +67,10 @@ socketSusbasta.on("connect_error", (err) => {
 // # puja:new - Realiza una puja a una subasta
 // # puja:cancel - Cancela la puja de una subasta
 
-
 // # Desconectarse del socket
 
 // EVENTOS QUE ESCUCHA
+
 // # subasta:usuarios - Recibe todos los usuarios que están conectados a la substa 
 // # subasta:new-usuario - Recibe un usuario que se acaba de conectar a la subasta
 // # subasta:leave-usuario - Recibe un usuario el cual acaba de desconectar de la subasta

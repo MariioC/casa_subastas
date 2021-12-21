@@ -1,26 +1,82 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { finishLoading, showError, startLoading } from '../../actions/ui';
+import { _getAllPujas } from '../../api/pujas.api';
 
-import Visitar from '../../assets/img/go.png';
-
-import { Link } from 'react-router-dom';
-
+import { TrItemPuja } from './TrItemPuja';
 
 export const ReportesExterno = () => {
+
+    const dispatch = useDispatch();
+
+    const [filtro, setFiltro] = useState('all')
+
+    const [pujas, setPujas] = useState([])
+    const [pujasFiltradas, setPujasFiltradas] = useState([])
+
+    useEffect(() => {
+        
+        const getPujas = async () => {
+            dispatch(startLoading())
+            try {
+                const { data } = await _getAllPujas()
+                dispatch(finishLoading())
+
+                if(data.error) {
+                    dispatch(showError( data.error ))
+                    return
+                }
+    
+                const { pujas } = data
+                setPujas(pujas);
+                
+            } catch (error) {
+                dispatch(finishLoading())
+                console.error(error)
+                setPujas([])
+            }
+        }
+
+        getPujas()
+
+    }, [ dispatch ])
+
+    useEffect(() => {
+
+        if(!pujas.length) return setPujasFiltradas([]);
+
+        if(filtro === 'winners') {
+            setPujasFiltradas(pujas.filter( p => p.ganadora === true))
+        } else if(filtro === 'losers') {
+            setPujasFiltradas(pujas.filter( p => p.ganadora === false))
+        } else {
+            // ALL
+            setPujasFiltradas(pujas)
+        }
+
+    }, [ filtro, pujas ])
+
     return (
         <div className="reportes-externo mb-5">
+
             <div className="d-flex justify-content-center mb-4">
                 <div className="btn-group" role="group">
-                    <button type="button" className="btn btn-outline-primary border-2 fw-bolder py-2 px-3 shadow">
+
+                    <button type="button" onClick={() => setFiltro('all')} className={`btn btn-outline-primary border-2 fw-bolder py-2 px-3 shadow ${filtro === 'all' && 'active'}`}>
                         Pujas realizadas
                     </button>
-                    <button type="button" className="btn btn-outline-primary border-2 fw-bolder py-2 px-3 shadow">
-                        Pujas ganadas
+
+                    <button type="button" onClick={() => setFiltro('winners')} className={`btn btn-outline-primary border-2 fw-bolder py-2 px-3 shadow ${filtro === 'winners' && 'active'}`}>
+                    Pujas ganadas
                     </button>
-                    <button type="button" className="btn btn-outline-primary border-2 fw-bolder py-2 px-3 shadow">
+
+                    <button type="button" onClick={() => setFiltro('losers')} className={`btn btn-outline-primary border-2 fw-bolder py-2 px-3 shadow ${filtro === 'losers' && 'active'}`}>
                         Pujas perdidas
                     </button>
+
                 </div>
             </div>
+
             <div className="resultados-reporte col-12 mb-5">
                 <h3 className="fw-bolder text-center mb-2 col-10 mx-auto">Resultados</h3>
                 <div className="container-tabla rounded border border-2 border-primary" style={{ overflowX: "auto" }}>
@@ -34,33 +90,19 @@ export const ReportesExterno = () => {
                             </tr>
                         </thead>
                         <tbody className="border-0">
-                            <tr className="table-success">
-                                <td className="text-success fw-bolder">Ganada</td>
-                                <td className="fw-bolder">$ 3.000.000</td>
-                                <td>21 nov 2021 a las 17:50</td>
-                                <td>
-                                    <Link to="/subasta" className="hint--left" aria-label="Ir a la subasta">
-                                        <img src={ Visitar } alt="Ir" width={40} height={40} />
-                                    </Link>
-                                </td>
-                            </tr>
-                            <tr className="table-danger">
-                                <td className="text-danger fw-bolder">Perdida</td>
-                                <td className="fw-bolder">$ 3.000.000</td>
-                                <td>21 nov 2021 a las 17:50</td>
-                                <td>
-                                    <Link to="/subasta" className="hint--left" aria-label="Ir a la subasta">
-                                        <img src={ Visitar } alt="Ir" width={40} height={40} />
-                                    </Link>
-                                </td>
-                            </tr>
+
+                            {
+                                !pujasFiltradas.length && <tr><td colSpan={4} className="alert alert-danger text-center border-0 fw-bolder animated fadeIn fast">No se han encontrado registros</td></tr>
+                            }
+
+                            {
+                                pujasFiltradas.map( puja => (
+                                    <TrItemPuja key={puja._id} puja={puja} />
+                                ))
+                            }
+
                         </tbody>
                     </table>
-                </div>
-                <div className="d-flex justify-content-center my-3">
-                    <button type="button" className="btn btn-outline-success border-2 mx-auto fw-bolder">
-                        Generar reporte
-                    </button>
                 </div>
             </div>
         </div>

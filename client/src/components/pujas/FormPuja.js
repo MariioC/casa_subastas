@@ -7,7 +7,7 @@ import { _newPuja } from '../../api/pujas.api'
 
 import { SubastaContext } from '../../context/SubastaContext'
 import { finishLoading, showError, startLoading } from '../../actions/ui'
-import { socketSusbasta } from '../../sockets/socket'
+import { socketSubasta } from '../../sockets/socket'
 
 export const FormPuja = () => {
 
@@ -49,7 +49,7 @@ export const FormPuja = () => {
             const { puja } = data
 
             if(!finalizada)
-                socketSusbasta.emit('subasta:new-puja', { puja })
+                socketSubasta.emit('subasta:new-puja', { puja })
 
         } catch (error) {
             console.error(error)

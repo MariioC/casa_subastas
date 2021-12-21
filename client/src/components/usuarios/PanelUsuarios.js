@@ -3,7 +3,7 @@ import { NotiUsuarios } from './NotiUsuarios'
 import { ListUsuarios } from './ListUsuarios'
 import { SubastaContext } from '../../context/SubastaContext'
 
-import { socketSusbasta } from '../../sockets/socket'
+import { socketSubasta } from '../../sockets/socket'
 
 // import notificacion from '../../assets/audio/notificacion.mp3'
 
@@ -14,26 +14,23 @@ export const PanelUsuarios = React.memo(() => {
     useEffect(() => {
 
         if(!finalizada){
-            socketSusbasta.on('subasta:usuarios', ({ usuarios }) => {
-                console.log('usuarios', usuarios)
+            socketSubasta.on('subasta:usuarios', ({ usuarios }) => {
                 setParticipantes( usuarios )
             })
     
-            socketSusbasta.on('subasta:new-usuario', ({ usuario }) => {
-                console.log('new-usuario', usuario)
+            socketSubasta.on('subasta:new-usuario', ({ usuario }) => {
                 addParticipante( usuario )
             })
     
-            socketSusbasta.on('subasta:leave-usuario', ({ usuario }) => {
-                console.log('leave-usuario', usuario)
+            socketSubasta.on('subasta:leave-usuario', ({ usuario }) => {
                 removeParticipante( usuario )
             })
         }
 
         return () => {
-            socketSusbasta.off('subasta:usuarios')
-            socketSusbasta.off('subasta:new-usuario')
-            socketSusbasta.off('subasta:leave-usuario')
+            socketSubasta.off('subasta:usuarios')
+            socketSubasta.off('subasta:new-usuario')
+            socketSubasta.off('subasta:leave-usuario')
         }
     }, [ finalizada, online, setParticipantes, addParticipante, removeParticipante ])
 

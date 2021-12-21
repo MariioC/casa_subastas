@@ -13,18 +13,32 @@ import { NotificacionesController } from '../controllers/notificaciones.controll
 
 export const pujasRoutes = Router()
 
+pujasRoutes.get('/', verifyUserToken, async (req, res) => {
+    const { data_token } = req.body
+    try {
+        const pujas = await PujasController.getAllPujasByUsuario( data_token.documento )
+        res.json({
+            pujas
+        })
+    } catch (error) {
+        console.log(error)
+        res.json({
+            error: 'Ha ocurrido un error inesperado al obtener las pujas',
+        })
+    }
+});
+
 pujasRoutes.get('/:id_subasta', verifyUserToken, async (req, res) => {
     const { id_subasta } = req.params
     try {
         const pujas = await PujasController.getPujasBySubasta(id_subasta)
         res.json({
-            message: 'Hola desde el ENDPOINT pujas',
             pujas,
         })
     } catch (error) {
         console.log(error)
         res.json({
-            error: 'Ha ocurrido un error inesperado al crear la subasta',
+            error: 'Ha ocurrido un error inesperado al obtener las pujas de la subasta',
         })
     }
 });

@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { finishLoading, showError, startLoading } from '../../actions/ui';
 import { SubastaProvider } from '../../context/SubastaContext';
 import { LoadingPage } from '../../components/LoadingPage';
-import { connectSocketSubasta, socketSusbasta } from '../../sockets/socket';
+import { connectSocketSubasta, socketSubasta } from '../../sockets/socket';
 import { ToastCancelPuja } from '../../components/subastas/ToastCancelPuja';
 
 import './Subasta.css';
@@ -73,7 +73,7 @@ const Subasta = () => {
                     pujas
                 });
 
-                if (enCurso) {
+                if (subasta.online && enCurso) {
                     dispatch( showError('La subasta ya inicio. No se permiten más participantes') )
                     return navigate('/', { replace: true });
                 }
@@ -92,7 +92,7 @@ const Subasta = () => {
         getSubastas();
 
         return () => {
-            socketSusbasta.disconnect();
+            socketSubasta.disconnect();
         }
         
     }, [ dispatch, id, navigate ])

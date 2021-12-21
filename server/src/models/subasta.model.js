@@ -35,6 +35,7 @@ const SubastaSchema = new Schema({
     monto_inicial: {
         type: Number,
         required: true,
+        default: 0
     },
     online: {
         type: Boolean,

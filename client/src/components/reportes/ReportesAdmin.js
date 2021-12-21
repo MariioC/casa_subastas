@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Visitar from '../../assets/img/go.png';
 import Editar from '../../assets/img/editar.png';
@@ -7,8 +7,6 @@ import Eliminar from '../../assets/img/eliminar.png';
 import { Link } from 'react-router-dom';
 
 export const ReportesAdmin = () => {
-
-    const [img, setImg] = useState('');
 
     return (
         <div className="reportes-admin mb-5">
@@ -31,7 +29,6 @@ export const ReportesAdmin = () => {
                     <table className="table mb-0 table-hover table-responsive text-center table-borderless" style={{ minWidth: 700 }}>
                         <thead className="bg-primary text-white">
                             <tr>
-                                <th scope="col">Foto</th>
                                 <th scope="col">Nombre subasta</th>
                                 <th scope="col">Monto inicial</th>
                                 <th scope="col">Puja ganadora</th>
@@ -43,15 +40,6 @@ export const ReportesAdmin = () => {
                         </thead>
                         <tbody className="border-0">
                             <tr className="border-secondary">
-                                <td>
-                                    { img ? 
-                                        <img className="foto animated fadeIn" src="@/assets/img/reliquia3.jpg" alt="Ir" width={100} height={100} />
-                                        :
-                                        <svg className="animated fadeIn" width={100} height={100}>
-                                            <rect x="0" y="0" width={100} height={100} style={{ fill: "#CCC" }} />
-                                        </svg>
-                                    }
-                                </td>
                                 <td className="fw-bolder">Subasta Numero 1</td>
                                 <td>$ 1.500.000</td>
                                 <td>$ 3.000.000</td>
@@ -73,15 +61,6 @@ export const ReportesAdmin = () => {
                                 </td>
                             </tr>
                             <tr className="border-secondary">
-                                <td>
-                                    { img ? 
-                                        <img className="foto animated fadeIn" src="@/assets/img/reliquia3.jpg" alt="Ir" width={100} height={100} />
-                                        :
-                                        <svg className="animated fadeIn" width={100} height={100}>
-                                            <rect width={100} height={100} style={{ fill: "#CCC" }} />
-                                        </svg>
-                                    }
-                                </td>
                                 <td className="fw-bolder">Subasta Numero 2</td>
                                 <td>$ 1.500.000</td>
                                 <td>$ 3.000.000</td>
@@ -103,15 +82,6 @@ export const ReportesAdmin = () => {
                                 </td>
                             </tr>
                             <tr className="border-secondary">
-                                <td>
-                                    { img ? 
-                                        <img className="foto animated fadeIn" src="@/assets/img/reliquia3.jpg" alt="Ir" width={100} height={100} />
-                                        :
-                                        <svg className="animated fadeIn" width={100} height={100}>
-                                            <rect x="0" y="0" width={100} height={100} style={{ fill: "#CCC" }} />
-                                        </svg>
-                                    }
-                                </td>
                                 <td className="fw-bolder">Subasta Numero 3</td>
                                 <td>$ 1.500.000</td>
                                 <td>$ 3.000.000</td>

@@ -7,6 +7,7 @@ import { CardSubasta } from '../../components/subastas/CardSubasta';
 import Logo from '../../assets/img/logo.png'
 import './Home.css';
 import { _getSubastas } from '../../api/subastas.api';
+import { finishLoading } from '../../actions/ui';
 // import { showError } from '../../actions/ui';
 
 const Home = () => {
@@ -32,6 +33,7 @@ const Home = () => {
                 setSubastas(subastas);
                 
             } catch (error) {
+                dispatch(finishLoading())
                 console.error(error)
                 setSubastas([])
                 // dispatch(showError())

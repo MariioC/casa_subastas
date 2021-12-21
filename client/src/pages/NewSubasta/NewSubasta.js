@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { finishLoading, showError, showSuccess, startLoading } from '../../actions/ui';
-import { _newSubasta } from '../../api/subastas.api';
+import { URI_IMGS } from '../../api/config.api';
+import { _newSubasta, _updateSubasta } from '../../api/subastas.api';
 import { LoadingBtn } from '../../components/LoadingBtn';
 import { useForm } from '../../hooks/useForm';
 
@@ -16,6 +17,24 @@ const NewSubasta = () => {
     const [previewImg, setPreviewImg] = useState(null)
 
     const { state: dataSubasta } = useLocation()
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (dataSubasta) {
+            const fecha_inicio = new Date(dataSubasta.fecha_inicio)
+            dataSubasta.fecha_inicio = fecha_inicio.toISOString().split('T')[0]
+    
+            const fecha_fin = new Date(dataSubasta.fecha_fin)
+            dataSubasta.fecha_fin = fecha_fin.toISOString().split('T')[0]
+    
+            const fecha_cancelacion = new Date(dataSubasta.fecha_cancelacion)
+            dataSubasta.fecha_cancelacion = fecha_cancelacion.toISOString().split('T')[0]
+    
+            const img = URI_IMGS + dataSubasta.foto
+            setPreviewImg(img)
+        }
+    }, [ dataSubasta ])
+
     
     let initDataForm = dataSubasta ? dataSubasta : {
         nombre: '',
@@ -28,8 +47,6 @@ const NewSubasta = () => {
         monto_inicial: '',
         online: ''
     }
-
-    console.log(dataSubasta);
 
     const [ subasta, handleInputChange, resetData ] = useForm(initDataForm)
 
@@ -64,7 +81,7 @@ const NewSubasta = () => {
 
         try {
             
-            const { data } = await _newSubasta( formData ) 
+            const { data } = !dataSubasta ? await _newSubasta( formData ) : await _updateSubasta( dataSubasta._id, formData );
             dispatch(finishLoading())
 
             if(data.error) {
@@ -74,11 +91,18 @@ const NewSubasta = () => {
 
             dispatch(showSuccess( data.message ))
 
-            resetData();
-            formSubasta.reset();
-            setPreviewImg(null);
+            if(!dataSubasta) {
+                resetData();
+                formSubasta.reset();
+                setPreviewImg(null);
+            }
+
+            if(dataSubasta) {
+                navigate(`/edit/subasta/${dataSubasta._id}`, { replace: true, state: data.subasta })
+            }
 
         } catch (error) {
+            console.error(error)
             dispatch(showError())
         }
 
@@ -88,7 +112,7 @@ const NewSubasta = () => {
     return (
         <div className="crear-subasta container my-4">
             <form id="form-subasta" onSubmit={ handleSubmit } className="col-md-6 mx-auto d-flex flex-column border rounded-3 py-3 px-4 shadow animated fadeIn">
-                <h2 className="text-center mb-4 fw-bolder">Nueva subasta</h2>
+                <h2 className="text-center mb-4 fw-bolder">{ !dataSubasta ? 'Nueva subasta' : 'Actualizar subasta' }</h2>
                 <div className="group-subasta d-flex align-items-center flex-wrap">
                     <div className="form-floating mb-3">
                         <input type="text" 
@@ -216,7 +240,7 @@ const NewSubasta = () => {
                 }
                 <div className="d-flex align-items-center justify-content-center mb-2">
                     <button type="submit" className="btn btn-outline-primary d-flex align-items-center fw-bolder border-2">
-                        Crear subasta
+                        { !dataSubasta ? 'Crear subasta' : 'Actualizar subasta' }
                         { loading && <LoadingBtn tipo="primary" /> }
                     </button>
                 </div>

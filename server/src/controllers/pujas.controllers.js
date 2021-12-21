@@ -1,6 +1,10 @@
 import PujaModel from "../models/puja.model";
 
 export const PujasController = {
+    async getAllPujasByUsuario( documento_pujador ) {
+        return await PujaModel.find({ documento_pujador }).sort({ valor : -1 })
+    },
+
     async getPujasBySubasta(id_subasta) {
         return await PujaModel.find({ id_subasta }).sort({ valor : -1 })
     },
@@ -34,5 +38,10 @@ export const PujasController = {
         // return await PujaModel.find({ id_subasta, valor })
         await PujaModel.findByIdAndRemove(id_puja)
         return true
+    },
+
+    async deleteAllPujaBySubasta( id_subasta ) {
+        // return await PujaModel.find({ id_subasta, valor })
+        await PujaModel.deleteMany({ id_subasta })
     },
 };

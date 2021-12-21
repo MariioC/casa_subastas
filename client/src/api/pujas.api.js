@@ -1,5 +1,9 @@
 import { api } from './config.api'
 
+export const _getAllPujas = async ( ) => {
+    return await api.get(`pujas/`)
+}
+
 export const _newPuja = async ( id_subasta, puja ) => {
     return await api.post(`pujas/new/${id_subasta}`, puja)
 }

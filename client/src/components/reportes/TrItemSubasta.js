@@ -1,17 +1,45 @@
 import React from 'react'
 
-import Visitar from '../../assets/img/go.png';
-import Editar from '../../assets/img/editar.png';
-import Eliminar from '../../assets/img/eliminar.png';
+import Visitar from '../../assets/img/go.png'
+import Editar from '../../assets/img/editar.png'
+import Eliminar from '../../assets/img/eliminar.png'
 
 import { URI_IMGS } from '../../api/config.api'
 
-import { Link } from 'react-router-dom';
-import { prettierFecha, prettierValorCOP } from '../../helpers/format';
-export const TrItemSubasta = ({ subasta }) => {
+import { Link } from 'react-router-dom'
+import { prettierFecha, prettierValorCOP } from '../../helpers/format'
+import { useDispatch } from 'react-redux';
+import { finishLoading, showError, showSuccess, startLoading } from '../../actions/ui'
+import { _deleteSubasta } from '../../api/subastas.api'
 
+export const TrItemSubasta = ({ subasta, setSubastas}) => {
+
+    const dispatch = useDispatch();
     
     const { _id, nombre, foto, monto_inicial, fecha_inicio, fecha_fin, finalizada} = subasta
+
+    const deleteSubasta = async ( e ) => {
+        e.preventDefault()
+
+        dispatch( startLoading() )
+
+        try {
+            const { data } = await _deleteSubasta(_id)
+            dispatch( finishLoading() )
+
+            if(data.error) {
+                dispatch( showError(data.error) )
+                return 
+            }
+
+            dispatch( showSuccess( data.message ) )
+            setSubastas(subastas => (subastas.filter(s => s._id !== _id)))
+
+        } catch (error) {
+            console.log(error);
+            dispatch( showError() )
+        }
+    }
 
     return (
         <tr className={`${!finalizada ? 'table-success': 'table-danger'} border-secondary animated zoomIn faster`}>
@@ -33,9 +61,9 @@ export const TrItemSubasta = ({ subasta }) => {
                 </Link>
             </td>
             <td>
-                <Link to="/" className="hint--left" aria-label="Eliminar subasta">
+                <a href="/" onClick={ deleteSubasta } className="hint--left" aria-label="Eliminar subasta">
                     <img src={ Eliminar } alt="Ir" width={40} height={40} />
-                </Link>
+                </a>
             </td>
         </tr>
     )

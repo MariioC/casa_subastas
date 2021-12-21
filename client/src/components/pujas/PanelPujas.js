@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { SubastaContext } from '../../context/SubastaContext'
-import { socketSusbasta } from '../../sockets/socket'
+import { socketSubasta } from '../../sockets/socket'
 
 import { BestPuja } from './BestPuja'
 import { FormPuja } from './FormPuja'
@@ -16,26 +16,23 @@ export const PanelPujas = ( ) => {
     useEffect(() => {
         if(!finalizada) {
 
-            socketSusbasta.on('subasta:new-puja', ({ puja }) => {
-                console.log('new-puja', puja)
+            socketSubasta.on('subasta:new-puja', ({ puja }) => {
                 addPuja(puja)
             })
     
-            socketSusbasta.on('subasta:cancel-puja', ({ id_puja }) => {
-                console.log('cancel-puja', id_puja)
+            socketSubasta.on('subasta:cancel-puja', ({ id_puja }) => {
                 removePuja( id_puja )
             })
 
         }
 
         return () => {
-            socketSusbasta.off('subasta:new-puja')
-            socketSusbasta.off('subasta:cancel-puja')
+            socketSubasta.off('subasta:new-puja')
+            socketSubasta.off('subasta:cancel-puja')
         }
     }, [ online, finalizada, addPuja, removePuja ])
 
     const toggleSonido = () => {
-
         setSonido( !sonido )
     }
 

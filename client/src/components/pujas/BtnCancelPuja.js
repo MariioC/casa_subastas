@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 import { _cancelPuja } from '../../api/pujas.api'
 import { finishLoading, showError, showSuccess, startLoading } from '../../actions/ui'
 import { useDispatch } from 'react-redux'
-import { socket, socketSusbasta } from '../../sockets/socket'
+import { socket, socketSubasta } from '../../sockets/socket'
 
 export const BtnCancelPuja = ( { id_puja } ) => {
 
@@ -38,7 +38,7 @@ export const BtnCancelPuja = ( { id_puja } ) => {
                     dispatch(showSuccess(data.message))
 
                     // Trabajar con el websocket para emitir el evento de remove puja
-                    socketSusbasta.emit('subasta:cancel-puja', { id_puja })
+                    socketSubasta.emit('subasta:cancel-puja', { id_puja })
 
                     // Notificar al usuario que corresponda que es el nuevo ganador de la subasta
                     const { notificacion } = data

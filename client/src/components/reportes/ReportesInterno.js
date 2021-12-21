@@ -35,6 +35,7 @@ export const ReportesInterno = () => {
                 setSubastas(subastas);
                 
             } catch (error) {
+                dispatch(finishLoading())
                 console.error(error)
                 setSubastas([])
             }
@@ -46,7 +47,7 @@ export const ReportesInterno = () => {
 
     useEffect(() => {
 
-        if(!subastas.length) return;
+        if(!subastas.length) return setSubastasFiltradas([]);
 
         const subastasMaped = subastas.map( subasta => {
             const dateFin = new Date(subasta.fecha_fin)
@@ -107,52 +108,17 @@ export const ReportesInterno = () => {
                         </thead>
                         <tbody className="border-0">
                             {
-                                !subastasFiltradas.length && <tr><td colSpan={8} className="alert alert-danger text-center border-0 bolder">No se han encontrado registros</td></tr>
+                                !subastasFiltradas.length && <tr><td colSpan={8} className="alert alert-danger text-center border-0 fw-bolder animated fadeIn fast">No se han encontrado registros</td></tr>
                             }
                             {
                                 subastasFiltradas.map( subasta => (
-                                    <TrItemSubasta key={subasta._id} subasta={subasta} />
+                                    <TrItemSubasta key={subasta._id} subasta={subasta} setSubastas={ setSubastas } />
                                 ))
                             }
-                            {/* <tr className="border-secondary">
-                                <td>
-                                    { img ? 
-                                        <img className="foto animated fadeIn" src="@/assets/img/reliquia3.jpg" alt="Ir" width={100} height={100} />
-                                        :
-                                        <svg className="animated fadeIn" width={100} height={100}>
-                                            <rect x="0" y="0" width={100} height={100} style={{ fill: "#CCC" }} />
-                                        </svg>
-                                    }
-                                </td>
-                                <td className="fw-bolder">Subasta Numero 1</td>
-                                <td>$ 1.500.000</td>
-                                <td>$ 3.000.000</td>
-                                <td>7</td>
-                                <td>
-                                    <Link to="/subasta" className="hint--left" aria-label="Ir a la subasta">
-                                        <img src={ Visitar } alt="Ir" width={40} height={40} />
-                                    </Link>
-                                </td>
-                                <td>
-                                    <Link to="/" className="hint--left" aria-label="Editar subasta">
-                                        <img src={ Editar } alt="Ir" width={40} height={40} />
-                                    </Link>
-                                </td>
-                                <td>
-                                    <Link to="/" className="hint--left" aria-label="Eliminar subasta">
-                                        <img src={ Eliminar } alt="Ir" width={40} height={40} />
-                                    </Link>
-                                </td>
-                            </tr> */}
                         </tbody>
                     </table>
                 </div>
             </div>
-            {/* <div className="d-flex justify-content-center my-4">
-                <button type="button" className="btn btn-outline-success border-2 mx-auto fw-bolder">
-                    Generar reporte
-                </button>
-            </div> */}
         </div>
     )
 }

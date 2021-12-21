@@ -26,4 +26,8 @@ export const SubastasController = {
 
         return await subasta.save()
     },
+
+    async deleteSubasta(id_subasta) {
+        return await SubastaModel.findByIdAndRemove({ _id: id_subasta })
+    },
 };

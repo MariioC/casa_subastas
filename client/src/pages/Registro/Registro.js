@@ -15,17 +15,29 @@ const Registro = () => {
     const dispatch = useDispatch()
     const { loading } = useSelector( state => state.ui )
 
-    const [ usuario, handleInputChange ] = useForm({
-        nombre: 'Mario Carreño',
-        tipo_documento: 'CC',
-        documento: 1085338002,
-        correo: 'macb079@gmail.com',
-        fecha_nacimiento: '1997-12-06',
-        expedicion_documento: '2015-12-15',
-        genero: 'Hombre',
-        password: '12345678',
-        re_password: '12345678',
-        tipo_usuario: 'externo'
+    const dataUsuario = useSelector( state => state.auth )
+
+    // const dataUsuario = {
+    //     nombre: usuario.nombre, 
+    //     tipo_documento: usuario.tipo_documento,
+    //     documento: usuario.documento,
+    //     correo: usuario.correo,
+    //     fecha_nacimiento: usuario.fecha_nacimiento,
+    //     expedicion_documento: usuario.expedicion_documento,
+    //     genero: usuario.genero
+    // }
+
+    const [ usuario, handleInputChange ] = useForm(dataUsuario?.documento ? dataUsuario : {
+        nombre: '',
+        tipo_documento: '',
+        documento: '',
+        correo: '',
+        fecha_nacimiento: '',
+        expedicion_documento: '',
+        genero: '',
+        password: '',
+        re_password: '',
+        tipo_usuario: ''
     })
 
     const {
@@ -63,6 +75,7 @@ const Registro = () => {
             dispatch(showSuccess( data.message ))
 
         } catch (error) {
+            console.error(error)
             dispatch(showError())
         }
 
